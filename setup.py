@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='tensorface',
-    version='0.0.0',
+    version='0.0.1',
     description='Tensorboard interFace',
     long_description=long_description,
     author='Audrey Beard',
@@ -18,5 +18,6 @@ setup(
     url='https://gitlab.com/AudreyBeard/tensorface',
         changelog={
             '0.0.0': 'first draft, supports grabbing all scalar values for a given run and for all runs',
+            '0.0.1': 'added support to group by scalar names, renamed methods to be more appropriate',
     }
 )

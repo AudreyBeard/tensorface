@@ -61,12 +61,35 @@ class TensorFace(object):
             for scalar_name in self._scalar_names_for(run_name)
         })
 
-    def all_scalars(self):
+    def all_runs(self):
         """ Grabs all scalar values for all runs
         """
         assert self._emux is not None
-        all_scalars = {k: self.scalars_for(k) for k in self.run_names}
+        all_runs = {
+            run_name: self.scalars_for(run_name) for run_name in self.run_names}
+        return all_runs
+
+    def all_scalars(self):
+        """ Grabs all runs for all scalar names
+        """
+        assert self._emux is not None
+        all_scalars = {
+            scalar_name: self.runs_with_scalar(scalar_name)
+            for scalar_name in self.scalar_names
+        }
         return all_scalars
+
+    def runs_with_scalar(self, scalar_name):
+        """ Grabs all runs with their scalars for a given scalar name
+            (also nice)
+        """
+        assert self._emux is not None
+        runs = {
+            run_name: self.get_events_dict(run_name, scalar_name)
+            for run_name in self.run_names
+            if scalar_name in self._scalar_names_for(run_name)
+        }
+        return runs
 
     def scalars_for(self, run_name):
         """ Gets all scalar values for a run name in a dict
@@ -91,6 +114,14 @@ class TensorFace(object):
             k: self._eventslist_to_dict(v)
             for k, v in scalar_events.items()
         }
+        return events_dict
+
+    def get_events_dict(self, run_name, scalar_name):
+        assert self._emux is not None
+        events_dict = self._eventslist_to_dict(self._emux.Scalars(
+            run_name,
+            scalar_name
+        ))
         return events_dict
 
     def _get_events(self):
